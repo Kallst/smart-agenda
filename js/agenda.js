@@ -8,6 +8,7 @@ const MONTH_LABELS = [
 const MIN_NAME_LENGTH = 3;
 
 let events = [];
+let editingId = null;
 
 /* ---------- Public API (used by Mari) ---------- */
 
@@ -115,7 +116,7 @@ function isDuplicateName(name, ignoreId) {
 }
 
 // Returns an error message string, or "" if the data is valid.
-// ignoreId is used by task A5 so editing an event does not clash with itself.
+// ignoreId lets an event be edited without clashing with itself.
 function validateEventInput(name, date, ignoreId) {
   const cleanName = (name || "").trim();
 
@@ -159,6 +160,65 @@ function showBoardMessage(message) {
   document.getElementById("board-message").textContent = message;
 }
 
+/* ---------- Delete and edit (task A5) ---------- */
+
+function deleteEvent(id) {
+  const event = findEventById(id);
+  if (!event) {
+    return;
+  }
+  if (!window.confirm('Delete "' + event.name + '"?')) {
+    return;
+  }
+
+  events = events.filter(function (item) {
+    return item.id !== id;
+  });
+  if (editingId === id) {
+    editingId = null;
+  }
+  saveEvents(events);
+  renderAgenda();
+}
+
+function startEdit(id) {
+  editingId = id;
+  renderAgenda();
+
+  const input = document.querySelector(".card.editing .card-edit-input");
+  if (input) {
+    input.focus();
+    input.select();
+  }
+}
+
+function cancelEdit() {
+  editingId = null;
+  renderAgenda();
+}
+
+function saveEdit(id, newName, errorElement) {
+  const event = findEventById(id);
+  if (!event) {
+    cancelEdit();
+    return;
+  }
+
+  const name = newName.trim();
+  const error = validateEventInput(name, event.date, id);
+  if (error) {
+    errorElement.textContent = error;
+    return;
+  }
+
+  event.name = name;
+  editingId = null;
+  saveEvents(events);
+  renderAgenda();
+}
+
+/* ---------- Card rendering ---------- */
+
 function compareByDate(a, b) {
   if (a.date === b.date) {
     return (a.createdAt || 0) - (b.createdAt || 0);
@@ -192,13 +252,71 @@ function createElementWithText(tag, className, text) {
   return element;
 }
 
+function createButton(label, className, onClick) {
+  const button = createElementWithText("button", className, label);
+  button.type = "button";
+  button.addEventListener("click", onClick);
+  return button;
+}
+
+function createActions(event) {
+  const actions = createElementWithText("div", "card-actions");
+  actions.appendChild(createButton("Edit", "btn-secondary", function () {
+    startEdit(event.id);
+  }));
+  actions.appendChild(createButton("Delete", "btn-danger", function () {
+    deleteEvent(event.id);
+  }));
+  return actions;
+}
+
+function createEditForm(event) {
+  const form = createElementWithText("form", "card-edit-form");
+  form.noValidate = true;
+
+  const input = createElementWithText("input", "card-edit-input");
+  input.type = "text";
+  input.value = event.name;
+  input.setAttribute("aria-label", "Event name");
+
+  const error = createElementWithText("p", "card-error");
+  error.setAttribute("role", "alert");
+
+  const actions = createElementWithText("div", "card-actions");
+  const saveButton = createElementWithText("button", "btn-primary", "Save");
+  saveButton.type = "submit";
+  actions.appendChild(saveButton);
+  actions.appendChild(createButton("Cancel", "btn-secondary", cancelEdit));
+
+  form.addEventListener("submit", function (submitEvent) {
+    submitEvent.preventDefault();
+    saveEdit(event.id, input.value, error);
+  });
+
+  input.addEventListener("keydown", function (keyEvent) {
+    if (keyEvent.key === "Escape") {
+      cancelEdit();
+    }
+  });
+
+  form.appendChild(input);
+  form.appendChild(error);
+  form.appendChild(actions);
+  return form;
+}
+
 function createCard(event) {
+  const isEditing = event.id === editingId;
+
   const card = document.createElement("article");
   card.className = "card";
   if (isOverdue(event)) {
     card.classList.add("overdue");
   }
-  card.setAttribute("draggable", "true");
+  if (isEditing) {
+    card.classList.add("editing");
+  }
+  card.setAttribute("draggable", isEditing ? "false" : "true");
   card.dataset.id = event.id;
 
   const badgeData = getDateBadge(event.date);
@@ -207,11 +325,14 @@ function createCard(event) {
   badge.appendChild(createElementWithText("span", "badge-month", badgeData.month));
 
   const body = createElementWithText("div", "card-body");
-  body.appendChild(createElementWithText("p", "card-title", event.name));
-  body.appendChild(createElementWithText("p", "card-date", event.date));
-
-  // TODO (A): task A5 adds the edit and delete buttons here
-  body.appendChild(createElementWithText("div", "card-actions"));
+  if (isEditing) {
+    body.appendChild(createEditForm(event));
+    body.appendChild(createElementWithText("p", "card-date", event.date));
+  } else {
+    body.appendChild(createElementWithText("p", "card-title", event.name));
+    body.appendChild(createElementWithText("p", "card-date", event.date));
+    body.appendChild(createActions(event));
+  }
 
   card.appendChild(badge);
   card.appendChild(body);
