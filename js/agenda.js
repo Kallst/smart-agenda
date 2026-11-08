@@ -5,6 +5,8 @@ const MONTH_LABELS = [
   "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
 ];
 
+const MIN_NAME_LENGTH = 3;
+
 let events = [];
 
 /* ---------- Public API (used by Mari) ---------- */
@@ -101,9 +103,31 @@ function addEvent(name, date) {
   return event;
 }
 
+function normalizeName(name) {
+  return name.trim().toLowerCase();
+}
+
+function isDuplicateName(name, ignoreId) {
+  const wanted = normalizeName(name);
+  return events.some(function (event) {
+    return event.id !== ignoreId && normalizeName(event.name) === wanted;
+  });
+}
+
+// Returns an error message string, or "" if the data is valid.
+// ignoreId is used by task A5 so editing an event does not clash with itself.
 function validateEventInput(name, date, ignoreId) {
-  // TODO (A): task A4. Return an error message string, or "" if the data is valid.
-  // ignoreId will be used by task A5 so editing an event does not clash with itself.
+  const cleanName = (name || "").trim();
+
+  if (cleanName.length < MIN_NAME_LENGTH) {
+    return "Name must be at least " + MIN_NAME_LENGTH + " characters.";
+  }
+  if (!date) {
+    return "Date is required.";
+  }
+  if (isDuplicateName(cleanName, ignoreId)) {
+    return "An event with this name already exists.";
+  }
   return "";
 }
 
