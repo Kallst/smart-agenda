@@ -122,6 +122,10 @@ button:hover {
   cursor: grab;
 }
 
+.card.editing {
+  cursor: default;
+}
+
 .card-badge {
   flex-shrink: 0;
   width: 3.2rem;
@@ -161,10 +165,49 @@ button:hover {
   color: #666;
 }
 
+/* Card actions: edit, delete, save, cancel */
 .card-actions {
   margin-top: 0.5rem;
   display: flex;
   gap: 0.5rem;
+}
+
+.card-actions button {
+  padding: 0.3rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.btn-secondary {
+  background: #e4e8ee;
+  color: #222;
+}
+
+.btn-secondary:hover {
+  background: #d3d9e2;
+}
+
+.btn-danger {
+  background: #c62828;
+}
+
+.btn-danger:hover {
+  background: #a31f1f;
+}
+
+/* Inline edit form */
+.card-edit-input {
+  width: 100%;
+  padding: 0.4rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.card-error {
+  min-height: 1.1rem;
+  margin-top: 0.25rem;
+  color: #c62828;
+  font-size: 0.85rem;
 }
 
 /* Chart */
