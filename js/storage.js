@@ -1,41 +1,60 @@
-// Task A2: localStorage persistence (implemented by A)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Agenda</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/calendar.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>Smart Agenda</h1>
+    <p class="app-location">Your location: <span id="location">Locating...</span></p>
+  </header>
 
-const STORAGE_KEY = "smartAgenda.events";
+  <main class="app-main">
+    <section class="panel form-panel">
+      <h2>New event</h2>
+      <form id="event-form" novalidate>
+        <div class="form-row">
+          <label for="event-name">Name</label>
+          <input type="text" id="event-name" name="name" placeholder="e.g. Team meeting">
+        </div>
+        <div class="form-row">
+          <label for="event-date">Date</label>
+          <input type="date" id="event-date" name="date">
+        </div>
+        <button type="submit" id="add-button">Add event</button>
+        <p id="form-error" class="form-error" role="alert"></p>
+      </form>
+    </section>
 
-function isValidStoredEvent(event) {
-  return (
-    event !== null &&
-    typeof event === "object" &&
-    typeof event.id === "string" &&
-    typeof event.name === "string" &&
-    typeof event.date === "string" &&
-    (event.status === "today" || event.status === "pending")
-  );
-}
+    <p id="board-message" class="board-message" role="status"></p>
 
-function saveEvents(events) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
-    return true;
-  } catch (error) {
-    console.error("Could not save events:", error);
-    return false;
-  }
-}
+    <section class="board">
+      <section class="zone zone-today-wrapper">
+        <h2>Today</h2>
+        <div id="zone-today" class="dropzone" data-status="today"></div>
+      </section>
 
-function loadEvents() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      return [];
-    }
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) {
-      return [];
-    }
-    return parsed.filter(isValidStoredEvent);
-  } catch (error) {
-    console.error("Could not load events, starting empty:", error);
-    return [];
-  }
-}
+      <section class="zone zone-pending-wrapper">
+        <h2>Pending</h2>
+        <div id="zone-pending" class="dropzone" data-status="pending"></div>
+      </section>
+    </section>
+
+    <section class="panel chart-panel">
+      <h2>Events overview</h2>
+      <canvas id="chart" width="400" height="250"></canvas>
+    </section>
+  </main>
+
+  <script src="js/storage.js"></script>
+  <script src="js/agenda.js"></script>
+  <script src="js/dragdrop.js"></script>
+  <script src="js/geo.js"></script>
+  <script src="js/canvas.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
