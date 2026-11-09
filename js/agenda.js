@@ -41,15 +41,40 @@ function moveEvent(id, newStatus) {
 }
 
 function canMoveEvent(id, newStatus) {
-  // TODO (Mari): task M4. If newStatus is "today" and "today" already has
-  // 5 events, return { ok: false, message: "Today is full (max. 5 events)." }.
-  // Moving an event to the status it already has must be allowed.
+  // Only Today has a limit
+  if (newStatus !== "today") {
+    return { ok: true };
+  }
+
+  // Moving an event to the status it already has is allowed
+  const event = findEventById(id);
+  if (event && event.status === "today") {
+    return { ok: true };
+  }
+
+  const todayCount = getEvents().filter(function (item) {
+    return item.status === "today";
+  }).length;
+
+  if (todayCount >= 5) {
+    return { ok: false, message: "Today is full (max. 5 events)." };
+  }
   return { ok: true };
 }
 
 function isOverdue(event) {
-  // TODO (Mari): task M4. Return true if event.date is before today's local date.
-  return false;
+  if (!event.date) {
+    return false;
+  }
+
+  // Local date as YYYY-MM-DD (toISOString would use UTC)
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  const todayString = year + "-" + month + "-" + day;
+
+  return event.date < todayString;
 }
 
 function renderAgenda() {
