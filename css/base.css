@@ -1,0 +1,223 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f6f8;
+  color: #222;
+  line-height: 1.4;
+}
+
+.app-header {
+  padding: 1.5rem 2rem;
+  background: #ffffff;
+  border-bottom: 1px solid #ddd;
+}
+
+.app-location {
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.app-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.panel {
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+}
+
+/* Form */
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.form-row input {
+  padding: 0.5rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background: #2f6fed;
+  color: #ffffff;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1f56c4;
+}
+
+.form-error {
+  min-height: 1.2rem;
+  margin-top: 0.5rem;
+  color: #c62828;
+  font-size: 0.9rem;
+}
+
+/* Board message (used by drag and drop rules) */
+.board-message {
+  min-height: 1.2rem;
+  color: #c62828;
+  font-size: 0.9rem;
+}
+
+/* Board with two columns */
+.board {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.zone {
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+}
+
+.zone h2 {
+  margin-bottom: 0.75rem;
+}
+
+.dropzone {
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  border: 2px dashed #ccc;
+  border-radius: 6px;
+}
+
+/* Event cards with date badge */
+.card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  cursor: grab;
+}
+
+.card.editing {
+  cursor: default;
+}
+
+.card-badge {
+  flex-shrink: 0;
+  width: 3.2rem;
+  padding: 0.35rem 0;
+  border: 1px solid #c9d6f5;
+  border-radius: 6px;
+  background: #eef2fb;
+  color: #2f6fed;
+  text-align: center;
+}
+
+.badge-day {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: bold;
+  line-height: 1.1;
+}
+
+.badge-month {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+}
+
+.card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-title {
+  font-weight: bold;
+  overflow-wrap: anywhere;
+}
+
+.card-date {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* Card actions: edit, delete, save, cancel */
+.card-actions {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.card-actions button {
+  padding: 0.3rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.btn-secondary {
+  background: #e4e8ee;
+  color: #222;
+}
+
+.btn-secondary:hover {
+  background: #d3d9e2;
+}
+
+.btn-danger {
+  background: #c62828;
+}
+
+.btn-danger:hover {
+  background: #a31f1f;
+}
+
+/* Inline edit form */
+.card-edit-input {
+  width: 100%;
+  padding: 0.4rem;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.card-error {
+  min-height: 1.1rem;
+  margin-top: 0.25rem;
+  color: #c62828;
+  font-size: 0.85rem;
+}
+
+/* Chart */
+#chart {
+  display: block;
+  max-width: 100%;
+}
+
+@media (max-width: 700px) {
+  .board {
+    grid-template-columns: 1fr;
+  }
+}
