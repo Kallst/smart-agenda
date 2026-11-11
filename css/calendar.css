@@ -1,1 +1,209 @@
-/* TODO (Mari): calendar style, colors per column, clean cards, responsive polish */
+:root {
+  --today-accent: #2f6fed;
+  --today-soft: #eef3ff;
+  --today-border: #c9d6f5;
+  --pending-accent: #d97706;
+  --pending-soft: #fff7ea;
+  --pending-border: #f3d9a4;
+  --overdue-accent: #c62828;
+  --overdue-soft: #fdecec;
+  --overdue-border: #f1b8b8;
+}
+
+/* ---------- Header ---------- */
+.app-header {
+  border-bottom: 4px solid var(--today-accent);
+}
+
+.app-header h1 {
+  letter-spacing: 0.01em;
+}
+
+/* ---------- Top accent on panels ---------- */
+.form-panel,
+.chart-panel {
+  border-top: 4px solid var(--today-accent);
+}
+
+/* ---------- Columns (Today / Pending) ---------- */
+.zone {
+  border-top-width: 4px;
+  border-top-style: solid;
+}
+
+.zone h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+
+.zone h2::before {
+  content: "";
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 3px;
+  background: var(--accent);
+}
+
+.zone-today-wrapper {
+  --accent: var(--today-accent);
+  --accent-soft: var(--today-soft);
+  --accent-border: var(--today-border);
+  border-top-color: var(--today-accent);
+}
+
+.zone-pending-wrapper {
+  --accent: var(--pending-accent);
+  --accent-soft: var(--pending-soft);
+  --accent-border: var(--pending-border);
+  border-top-color: var(--pending-accent);
+}
+
+.dropzone {
+  background: var(--accent-soft);
+  border: 2px dashed var(--accent-border);
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dropzone:empty::before {
+  color: var(--accent);
+  opacity: 0.75;
+}
+
+/* Zone highlighted while a card is dragged over it */
+.dropzone.drag-over {
+  border-style: solid;
+  border-color: var(--accent);
+  background: #ffffff;
+  box-shadow: inset 0 0 0 4px var(--accent-soft);
+}
+
+/* ---------- Cards ---------- */
+.card {
+  border: 1px solid var(--accent-border);
+  border-left: 5px solid var(--accent);
+  background: #ffffff;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12);
+}
+
+.card:active {
+  cursor: grabbing;
+}
+
+.card-title {
+  font-size: 1.02rem;
+  color: #0f172a;
+}
+
+.card-date {
+  margin-top: 0.15rem;
+  font-size: 0.85rem;
+}
+
+/* ---------- Calendar-page date badge ---------- */
+.card-badge {
+  display: flex;
+  flex-direction: column;
+  width: 3.4rem;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--accent-border);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--accent);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+}
+
+.badge-month {
+  order: -1;
+  padding: 0.22rem 0;
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.badge-day {
+  padding: 0.25rem 0 0.3rem;
+  font-size: 1.5rem;
+  color: var(--accent);
+}
+
+/* ---------- Overdue events (red) ---------- */
+.card.overdue {
+  --accent: var(--overdue-accent);
+  --accent-soft: var(--overdue-soft);
+  --accent-border: var(--overdue-border);
+  background: var(--overdue-soft);
+}
+
+.card.overdue .card-title {
+  color: var(--overdue-accent);
+}
+
+.card.overdue .card-date::after {
+  content: "Overdue";
+  margin-left: 0.5rem;
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  background: var(--overdue-accent);
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ---------- Buttons ---------- */
+.card-actions button {
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+/* ---------- Edit mode ---------- */
+.card.editing {
+  --accent: var(--today-accent);
+  background: #ffffff;
+  border-color: var(--today-accent);
+  box-shadow: 0 0 0 3px var(--today-soft);
+  transform: none;
+}
+
+.card-edit-input:focus {
+  border-color: var(--today-accent);
+  box-shadow: 0 0 0 3px var(--today-soft);
+}
+
+/* ---------- Chart panel ---------- */
+#chart {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+}
+
+/* ---------- Responsive (phones) ---------- */
+@media (max-width: 700px) {
+  .card {
+    padding: 0.7rem 0.85rem;
+  }
+
+  .card-actions button,
+  #add-button {
+    min-height: 40px;
+  }
+
+  .form-row input,
+  .card-edit-input {
+    font-size: 16px;
+  }
+}

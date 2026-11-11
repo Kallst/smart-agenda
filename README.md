@@ -285,4 +285,4 @@ Tag commands:
 - [ ] The chart shows the real counts and redraws when data changes
 - [ ] Maximum 5 events in Today and overdue events in red
 - [ ] The deployed link works (geolocation requires HTTPS, which GitHub Pages provides)
-- [ ] Delivery document has the link and both names
+- [ ] Delivery document has the link and both namess
